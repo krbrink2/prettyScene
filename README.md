@@ -1,0 +1,2 @@
+# prettyScene
+Exercise for OpenGL
