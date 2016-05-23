@@ -2,7 +2,7 @@
 	Draws a pretty scene.
 */
 #include <stdlib.h>
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <math.h>
 #include <SOIL/SOIL.h>
 #include "ezloader.h"
@@ -82,24 +82,24 @@ void display(){
 	glLoadIdentity();
 	gluLookAt(distance*sin(angle), elevation, distance*cos(angle), 0, 0, 0, 0, 1, 0);
 	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glDisable(GL_LIGHT1);
 
 	// Lights
 	GLfloat lightAmb[] = {.5*255/255, .5*229/255, .5*180/255};
 	GLfloat lightDiff[] = {(float)255/255, (float)229/255, (float)180/255};
 	GLfloat lightSpec[] = {1.0, 1.0, 1.0};
-	GLfloat light0Pos[] = {10.0, 10.0, 10.0};
-	//GLfloat light1Pos[] = {0, 1, -10};
 	//GLfloat light0Pos[] = {10*sin(angle/30), 10*cos(angle/30), 10};
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiff);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);
+	GLfloat light0Pos[] = {-10.0, 10.0, -10.0, 1.0};
 	glLightfv(GL_LIGHT0, GL_POSITION, light0Pos);
-	// glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmb);
-	// glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiff);
-	// glLightfv(GL_LIGHT1, GL_SPECULAR, lightSpec);
-	// glLightfv(GL_LIGHT1, GL_POSITION, light1Pos);
+	glEnable(GL_LIGHT0);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmb);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiff);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, lightSpec);
+	GLfloat light1Pos[] = {10.0, 10.0, -10.0, 1.0};
+	glLightfv(GL_LIGHT1, GL_POSITION, light1Pos);
+	glEnable(GL_LIGHT1);
 
 	// Teapot
 
@@ -167,7 +167,8 @@ void keyboard(unsigned char key, int x, int y){
 			distance += -1;
 			break;
 		case 27:
-			exit(0);
+			//exit(0);
+			glutLeaveMainLoop();
 			break;
 	}
 }
