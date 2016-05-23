@@ -89,9 +89,9 @@ void generateVertexArrays(){
 	//int i;
 	// Normalize all vertexNormals
 		// I am assuming this is done automatically
-	//for(i = 0; i < numVertices; i++){
-		//normalize(&(vertexNormals[i*3]));
-	//}
+	// for(i = 0; i < numVertices; i++){
+	// 	normalize(&(vertexNormals[i*3]));
+	// }
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glNormalPointer(GL_FLOAT, 0, vertexNormals);
 }
@@ -268,7 +268,7 @@ int ezload(FILE * fp){
 				// strtoi, then into GLint
 				int vtn = 0;
 				temp = strtok(tokens[i + 1], "/");
-					// temp is the same as early in funciton, but currently not in use
+					// temp is the same as early in function, but currently not in use
 				while(NULL != temp){
 					if(temp[0] == '\0')
 						// Got two '/' next to each other: no texture
