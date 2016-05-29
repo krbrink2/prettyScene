@@ -27,6 +27,10 @@ void init(){
 		SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	texNames[2] = SOIL_load_OGL_texture("..//textures//paper.jpg", 
 		SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texNames[3] = SOIL_load_OGL_texture("..//textures//tuscany.jpg", 
+		SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texNames[4] = SOIL_load_OGL_texture("..//textures//woodFloor.jpg", 
+		SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -74,13 +78,14 @@ void init(){
 	fclose(fp);
 
 	distance = 20;
+	elevation = 9;
 }
 
 
 void display(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
-	gluLookAt(distance*sin(angle), elevation, distance*cos(angle), 0, 0, 0, 0, 1, 0);
+	gluLookAt(distance*sin(angle), elevation, distance*cos(angle), 0, 7, 0, 0, 1, 0);
 	glEnable(GL_LIGHTING);
 
 	// Lights
@@ -91,23 +96,19 @@ void display(){
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiff);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);
-	GLfloat light0Pos[] = {-10.0, 10.0, -10.0, 1.0};
+	GLfloat light0Pos[] = {-10.0, 10.0, 10.0, 1.0};	// Ceiling
 	glLightfv(GL_LIGHT0, GL_POSITION, light0Pos);
-	glEnable(GL_LIGHT0);
+	glDisable(GL_LIGHT0);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmb);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiff);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, lightSpec);
-	GLfloat light1Pos[] = {10.0, 10.0, -10.0, 1.0};
+	GLfloat light1Pos[] = {0.0, 9.0, 1.0, 1.0};	// Lamp light
 	glLightfv(GL_LIGHT1, GL_POSITION, light1Pos);
 	glEnable(GL_LIGHT1);
 
+	// Draw objects
 	// Teapot
-
-	// Lamp
-
-	// Toyplane
-
-	// Table
+	// @TODO: disable texturing
 	// Set material
 	GLfloat matAmb[] = {.2, .2, .2, 1.f};
 	GLfloat matDiff[] = {.6, .6, .6, 1.f};
@@ -117,7 +118,90 @@ void display(){
 	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
 	glMaterialf(GL_FRONT, GL_SHININESS, 50);
 	// Texturing
-	glActiveTexture(GL_TEXTURE0);
+	//glActiveTexture(GL_TEXTURE2);
+	// Note: ActiveTexture only breaks stuff.
+	//glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBindTexture(GL_TEXTURE_2D, texNames[2]);
+	// DO NOT let OpenGL generate texture vertices
+	/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);*/
+	glPushMatrix();
+		glTranslatef(1, 7.55, 2.5);
+		glRotatef(90,0,0,1);
+		glRotatef(-45, 0, 1, 0);
+		glScalef(.02, .02, .02);
+		glCallList(callListIndices[0]);
+	glPopMatrix();
+
+	// Lamp
+	// Set material
+	// GLfloat matAmb[] = {.2, .2, .2, 1.f};
+	// GLfloat matDiff[] = {.6, .6, .6, 1.f};
+	// GLfloat matSpec[] = {1.f, 1.f, 1.f, 1.f};
+	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmb);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiff);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+	glMaterialf(GL_FRONT, GL_SHININESS, 50);
+	// Texturing
+	//glActiveTexture(GL_TEXTURE0);
+	//glEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBindTexture(GL_TEXTURE_2D, texNames[1]);
+	// DO NOT let OpenGL generate texture vertices
+	/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);*/
+	glPushMatrix();
+		glTranslatef(0, 7.48, 1);
+		glRotatef(-20, 0, 1, 0);
+		glScalef(.07, .07, .07);
+		glCallList(callListIndices[2]);
+	glPopMatrix();
+
+	// Toyplane
+	// Set material
+	// GLfloat matAmb[] = {.2, .2, .2, 1.f};
+	// GLfloat matDiff[] = {.6, .6, .6, 1.f};
+	// GLfloat matSpec[] = {1.f, 1.f, 1.f, 1.f};
+	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmb);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiff);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+	glMaterialf(GL_FRONT, GL_SHININESS, 50);
+	// Texturing
+	//glActiveTexture(GL_TEXTURE2);
+	// Note: ActiveTexture only breaks stuff.
+	//glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBindTexture(GL_TEXTURE_2D, texNames[0]);
+	// DO NOT let OpenGL generate texture vertices
+	/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);*/
+	glPushMatrix();
+		glTranslatef(-2, 8.05, 2.5);
+		glRotatef(-45, 0, 1, 0);
+		glScalef(.07, .07, .097);
+		glRotatef(20, 0, 0, 1);
+		glCallList(callListIndices[3]);
+	glPopMatrix();
+
+	// Table
+	// Set material
+	// matAmb[] = {.2, .2, .2, 1.f};
+	// matDiff[] = {.6, .6, .6, 1.f};
+	// matSpec[] = {1.f, 1.f, 1.f, 1.f};
+	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmb);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiff);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpec);
+	glMaterialf(GL_FRONT, GL_SHININESS, 50);
+	// Texturing
+	//glActiveTexture(GL_TEXTURE0);
 	//glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glBindTexture(GL_TEXTURE_2D, texNames[0]);
@@ -130,6 +214,64 @@ void display(){
 		glScalef(.1, .1, .1);
 		glTranslatef(0, 1, 0);
 		glCallList(callListIndices[1]);
+	glPopMatrix();
+
+
+	// Wall
+	GLfloat wallMatAmb[] = {.0, .0, .0, 1.f};
+	GLfloat wallMatDiff[] = {.9, .9, .9, 1.f};
+	GLfloat wallMatSpec[] = {.1, .1, .1, 1.f};
+	glMaterialfv(GL_FRONT, GL_AMBIENT, wallMatAmb);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, wallMatDiff);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, wallMatSpec);
+	glMaterialf(GL_FRONT, GL_SHININESS, 10);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBindTexture(GL_TEXTURE_2D, texNames[3]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glPushMatrix();
+		glTranslatef(0., 0, -1.26);
+		glScalef(10., 20., 0.);
+		glBegin(GL_QUADS);
+			float wallNormal[] = {0, 0, 1.f};
+			glTexCoord2f(0., 0.);
+			glNormal3fv(wallNormal);
+			glVertex3f(-1, 0, 0);
+			glTexCoord2f(0., 1.);
+			glNormal3fv(wallNormal);
+			glVertex3f(-1, 1, 0);
+			glTexCoord2f(1., 1.);
+			glNormal3fv(wallNormal);
+			glVertex3f(1, 1, 0);
+			glTexCoord2f(1., 0.);
+			glNormal3fv(wallNormal);
+			glVertex3f(1, 0, 0);
+		glEnd();
+	glPopMatrix();
+
+	// Floor
+	GLfloat floorMatAmb[] = {.0, .0, .0, 1.f};
+	GLfloat floorMatDiff[] = {.9, .9, .9, 1.f};
+	GLfloat floorMatSpec[] = {.1, .1, .1, 1.f};
+	glMaterialfv(GL_FRONT, GL_AMBIENT, floorMatAmb);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, floorMatDiff);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, floorMatSpec);
+	glMaterialf(GL_FRONT, GL_SHININESS, 10);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBindTexture(GL_TEXTURE_2D, texNames[4]);
+	glPushMatrix();
+		glRotatef(90, 1, 0, 0);
+		glScalef(20., 20., 20.);
+		glBegin(GL_QUADS);
+			glTexCoord2f(-5., -5.);
+			glVertex3f(-1, -1, 0);
+			glTexCoord2f(-5., 5.);
+			glVertex3f(-1, 1, 0);
+			glTexCoord2f(5., 5.);
+			glVertex3f(1, 1, 0);
+			glTexCoord2f(5., -5.);
+			glVertex3f(1, -1, 0);
+		glEnd();
 	glPopMatrix();
 
 	glutSwapBuffers();
@@ -149,22 +291,22 @@ void reshape(int w, int h){
 void keyboard(unsigned char key, int x, int y){
 	switch(key){
 		case 'w':
-			elevation += 1;
+			elevation += .5;
 			break;
 		case 'a':
-			angle += .1;
+			angle += -.05;
 			break;
 		case 's':
-			elevation += -1;
+			elevation += -.5;
 			break;
 		case 'd':
-			angle += -.1;
+			angle += .05;
 			break;
 		case 'z':
-			distance += 1;
+			distance += .5;
 			break;
 		case 'x':
-			distance += -1;
+			distance += -.5;
 			break;
 		case 27:
 			//exit(0);
