@@ -96,9 +96,9 @@ void display(){
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiff);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);
-	GLfloat light0Pos[] = {-10.0, 10.0, 10.0, 1.0};	// Ceiling
+	GLfloat light0Pos[] = {-100.0, 100.0, 100.0, 1.0};	// Ceiling
 	glLightfv(GL_LIGHT0, GL_POSITION, light0Pos);
-	glDisable(GL_LIGHT0);
+	glEnable(GL_LIGHT0);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmb);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiff);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, lightSpec);
@@ -130,7 +130,6 @@ void display(){
 	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);*/
 	glPushMatrix();
 		glTranslatef(1, 7.55, 2.5);
-		glRotatef(90,0,0,1);
 		glRotatef(-45, 0, 1, 0);
 		glScalef(.02, .02, .02);
 		glCallList(callListIndices[0]);
@@ -233,18 +232,14 @@ void display(){
 		glTranslatef(0., 0, -1.26);
 		glScalef(10., 20., 0.);
 		glBegin(GL_QUADS);
-			float wallNormal[] = {0, 0, 1.f};
+			glNormal3f(0, 0, -1);
 			glTexCoord2f(0., 0.);
-			glNormal3fv(wallNormal);
 			glVertex3f(-1, 0, 0);
 			glTexCoord2f(0., 1.);
-			glNormal3fv(wallNormal);
 			glVertex3f(-1, 1, 0);
 			glTexCoord2f(1., 1.);
-			glNormal3fv(wallNormal);
 			glVertex3f(1, 1, 0);
 			glTexCoord2f(1., 0.);
-			glNormal3fv(wallNormal);
 			glVertex3f(1, 0, 0);
 		glEnd();
 	glPopMatrix();
@@ -261,8 +256,9 @@ void display(){
 	glBindTexture(GL_TEXTURE_2D, texNames[4]);
 	glPushMatrix();
 		glRotatef(90, 1, 0, 0);
-		glScalef(20., 20., 20.);
+		glScalef(10., 10., 10.);
 		glBegin(GL_QUADS);
+			glNormal3f(0, 0, -1);
 			glTexCoord2f(-5., -5.);
 			glVertex3f(-1, -1, 0);
 			glTexCoord2f(-5., 5.);
